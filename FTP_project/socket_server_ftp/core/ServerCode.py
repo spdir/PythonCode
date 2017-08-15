@@ -36,17 +36,17 @@ class ServerFtp(socketserver.BaseRequestHandler):
 
     def c_put(self,*args):  #基本功能已实现
         """客户端用户上传文件"""
-        self.request.send('yes'.encode('utf-8'))
         mgs_dic = args[0]
         filename = mgs_dic['filename']
         filesize = mgs_dic['filesize']
-        if not os.path.isfile(filename):
-            cover = 'no'
+        if  os.path.isfile(filename):
+            cover = True
         else:
-            cover = 'yes'
-        self.request.send(cover.encode('utf-8'))
-        recv_cover = self.request.recv(1024).decode()
-        if recv_cover == 'y':
+            cover = False
+        self.request.send(json.dumps(cover).encode('utf-8'))
+        recv_cover_json = self.request.recv(1024)
+        recv_cover = json.loads(recv_cover_json.decode())
+        if recv_cover:
             f  = open(filename,'wb')
             local_filesize = 0
             while filesize > local_filesize:

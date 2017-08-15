@@ -71,23 +71,22 @@ class ClientFtp(object):
                     'filesize': filesize,
                 }
                 self.client.send(json.dumps(msg_dic).encode("utf-8"))
-                server_reponse = self.client.recv(1024) #防止粘包
-                cover = self.client.recv(1024).decode()
-                if cover == 'yes':
+                cover_recv = self.client.recv(1024)
+                cover = json.loads(cover_recv.decode())
+                if cover:
                     cover_inp = input("文件%s已存在,是否覆盖 y/n: "%filename)
                     if cover_inp == 'y':
-                        cover_to = 'y'
+                        cover_to = True
                     else:
-                        cover_to ='n'
+                        cover_to =False
                 else:
-                    cover_to = 'y'
-                self.client.send(cover_to.encode('utf-8'))
-                if cover_to == 'y':
+                    cover_to = True
+                self.client.send(json.dumps(cover_to).encode('utf-8'))
+                if cover_to:
                     f = open(filename, 'rb')
                     for line in f:
                         self.client.send(line)
                     else:
-                        ok = self.client.recv(1024) #防止粘包
                         print("文件%s上传成功"%filename)
                         f.close()
                 else:
