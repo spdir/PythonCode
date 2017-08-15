@@ -4,6 +4,7 @@ import socket
 import os
 import json
 import shutil
+import sys
 import getpass
 import hashlib
 
@@ -46,10 +47,10 @@ class ClientFtp(object):
       4. put [filename]    "上传文件";
       5. get [filename]    "下载文件";
       6. dir    "查看本地当前目录下的所有内容";
-      7. lcd    "切换本地目录";
-      8. lpwd   "查看本地所处的完整路径";
+      7. cdl    "切换本地目录";
+      8. pwdl   "查看本地所处的完整路径";
       9. rm "删除服务器用户当前目录的文件或文件夹 rm filename/dirname";
-      10. lrm   "删除客户端用户当前目录的文件或文件夹 lrm filename/dirname";
+      10. rml   "删除客户端用户当前目录的文件或文件夹 lrm filename/dirname";
       11. mkdir "用户在家目录中创建目录, mkdir dirname...";
       13. rename "重命名用户家目录中的文件或文件夹名称  rename filename/dirname";
       12. exit   "退出程序"
@@ -212,15 +213,29 @@ class ClientFtp(object):
             else:
                 print('- ', i)
 
-    def cmd_lcd(self,*args):
+    def cmd_cdl(self,*args):
         """客户端：本地切换目录"""
-        pass
+        cmd_data = args[0].split()
+        if len(cmd_data) > 1:
+            pwd = os.getcwd()
+            dir_com = cmd_data[1]
+            if dir_com == '..' or dir_com == '../':
+                cd_dir = os.path.dirname(pwd)
+                os.chdir(dir_com)
+            else:
+                cd_dir = os.path.join(pwd,dir_com)
+                if os.path.isdir(cd_dir):
+                    os.chdir(cd_dir)
+                else:
+                    print('路径不存在')
 
-    def cmd_lpwd(self,*args):
+    def cmd_pwdl(self,*args):
         """客户端：查看本地所处的目录"""
-        pass
+        pwd = os.getcwd()
+        print("Client:当前工作目录位于:")
+        print(pwd)
 
-    def cmd_lrm(self,*args):
+    def cmd_rml(self,*args):
         """客户端:删除用户家目录的文件"""
         cmd_data = args[0].split()
         if len(cmd_data) > 1:
@@ -263,7 +278,24 @@ class ClientFtp(object):
 
     def cmd_rename(self,*args):
         """服务端:重命名文件名"""
-        pass
+        cmd_data = args[0].split()
+        if len(cmd_data) > 2:
+            old_name = cmd_data[1]
+            new_name = cmd_data[2]
+            cmd_dic = {
+                'cmd':'rename',
+                'old_name':old_name,
+                'new_name':new_name,
+            }
+            self.client.send(json.dumps(cmd_dic).encode('utf-8'))
+            exist_recv = self.client.recv(1024)
+            exist = json.loads(exist_recv.decode())
+            if exist == 'y':
+                pass
+            else:
+                print("指定文件%s不存在"%old_name)
+        else:
+            pass
 
     def cmd_exit(self,*args):
         """用户退出"""

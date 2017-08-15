@@ -159,6 +159,22 @@ class ServerFtp(socketserver.BaseRequestHandler):
             really_mk = self.request.recv(1024).decode()
             if really_mk == 'y':
                 shutil.rmtree(dir_name)
-                os.makedirs(dir_name)
+                os.mkdir(dir_name)
             else:
                 pass
+
+    def c_rename(self,*args):
+        """服务端文件或目录更改名称"""
+        cmd_dic = args[0]
+        old_name = cmd_dic['old_name']
+        new_name = cmd_dic['new_name']
+        if os.path.isfile(old_name):
+            os.rename(old_name,new_name)
+            exist = 'y'
+        else:
+            if os.path.isdir(old_name):
+                os.rename(old_name, new_name)
+                exist = 'y'
+            else:
+                exist = 'n'
+        self.request.send(json.dumps(exist).encode('utf-8'))
