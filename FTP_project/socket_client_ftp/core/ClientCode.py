@@ -26,16 +26,19 @@ class ClientFtp(object):
 
     def __interactive__(self):
         """用户交互"""
-        print("登陆成功")
-        while True:
-            cmd_inp = input(">>> ").strip()
-            if len(cmd_inp) == 0:continue
-            cmd = cmd_inp.split()[0]
-            if hasattr(self,'cmd_'+cmd):
-                func = getattr(self,'cmd_'+cmd)
-                func(cmd_inp)
-            else:
-                print("输入的语法错误，请重新输入，您可以使用'help'命令进行帮助提示")
+        try:
+            print("登陆成功")
+            while True:
+                cmd_inp = input(">>> ").strip()
+                if len(cmd_inp) == 0:continue
+                cmd = cmd_inp.split()[0]
+                if hasattr(self,'cmd_'+cmd):
+                    func = getattr(self,'cmd_'+cmd)
+                    func(cmd_inp)
+                else:
+                    print("输入的语法错误，请重新输入，您可以使用'help'命令进行帮助提示")
+        except ConnectionResetError:
+            print("\033[31;1m服务器已停止\033[0m")
 
     def cmd_help(self,*args):
         """命令操作帮助"""
