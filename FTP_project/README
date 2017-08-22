@@ -1,4 +1,8 @@
 使用python3.5.2开发
+<<<<<<< HEAD
 基于socket
+=======
+基于socket 
+>>>>>>> fe6097a35b3f07d7d68995becf02e994169c5a3e
 一个类似FTP的Python程序
 (***纯属个人练习***)
