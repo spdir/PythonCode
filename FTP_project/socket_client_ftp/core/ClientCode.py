@@ -111,18 +111,17 @@ class ClientFtp(object):
             file_server_data = json.loads(file_server_recv_data)
             file_size = file_server_data['filesize']
             file_exist = file_server_data['exist']
-            if file_exist == 'yes':
-                file_cover_exist = ''
+            if file_exist:
                 if os.path.isfile(filename):
                     exist = input("当前目录中文件%s已存在,是否覆盖 y/n: "%filename)
                     if exist == 'y':
-                        file_cover_exist = 'yes'
+                        file_cover_exist = True
                     else:
-                        file_cover_exist = 'no'
+                        file_cover_exist = False
                 elif os.path.isfile(filename):
-                    file_cover_exist = 'yes'
-                self.client.send(file_cover_exist.encode('utf-8'))
-                if file_cover_exist == 'yes':
+                    file_cover_exist = False
+                self.client.send(json.dumps(file_cover_exist).encode('utf-8'))
+                if file_cover_exist:
                     f = open(filename, 'wb')
                     local_file_size = 0
                     while file_size > local_file_size:
@@ -181,11 +180,10 @@ class ClientFtp(object):
             exist_file_data = json.loads(exist_file_data_recv.decode())
             filetype= exist_file_data['filetype']
             file_exist = exist_file_data['exist']
-            really_rm = ''
-            if file_exist == 'y' and filetype == 'f':
+            if file_exist  and filetype == 'f':
                 really_rm = input("是否删除文件%s y/n:"%filename)
-            elif file_exist == 'y' and filetype == 'd':
-                really_rm = input("是否删除文件夹%s y/n"%filename)
+            elif file_exist and filetype == 'd':
+                really_rm = input("是否删除文件夹%s y/n:"%filename)
             else:
                 print("[Error] 指定参数%s不存在" % filename)
                 pass
@@ -266,8 +264,9 @@ class ClientFtp(object):
                 'dir_name':dir_name,
             }
             self.client.send(json.dumps(data_dic).encode('utf-8'))
-            exist_recv = self.client.recv(1024).decode()
-            if exist_recv == 'y':
+            exist_recv_json = self.client.recv(1024)
+            exist_recv = json.loads(exist_recv_json.decode())
+            if exist_recv:
                 really_mk = input("指定%s已存在是否覆盖(覆盖可能造成文件丢失) y/n:"%dir_name)
                 self.client.send(really_mk.encode('utf-8'))
             else:
@@ -289,7 +288,7 @@ class ClientFtp(object):
             self.client.send(json.dumps(cmd_dic).encode('utf-8'))
             exist_recv = self.client.recv(1024)
             exist = json.loads(exist_recv.decode())
-            if exist == 'y':
+            if exist:
                 pass
             else:
                 print("指定文件%s不存在"%old_name)

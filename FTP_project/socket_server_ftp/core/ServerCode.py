@@ -70,16 +70,17 @@ class ServerFtp(socketserver.BaseRequestHandler):
         filename = mgs_dic_server['filename']
         if os.path.isfile(filename):
             filesize = os.stat(filename).st_size
-            exist = 'yes'
+            exist = True
         else:
-            exist = 'no'
+            exist = False
         mgs_dic_client = {
             'filesize':filesize,
             'exist':exist,
         }
         self.request.send(json.dumps(mgs_dic_client).encode('utf-8'))
-        file_cover_exist = self.request.recv(1024).decode()
-        if exist == 'yes' and file_cover_exist == 'yes':
+        file_cover_exist_json = self.request.recv(1024)
+        file_cover_exist = json.loads(file_cover_exist_json.decode())
+        if exist and file_cover_exist:
             f = open(filename,'rb')
             for line in f:
                 self.request.send(line)
@@ -123,24 +124,24 @@ class ServerFtp(socketserver.BaseRequestHandler):
         filename = cmd_data['filename']
         if os.path.isfile(filename):
             filetype = 'f'
-            exist = 'y'
+            exist = True
         elif os.path.isdir(filename):
             filetype = 'd'
-            exist = 'y'
+            exist = True
         else:
             filetype = 'u'
-            exist = 'n'
+            exist = False
 
         data_dic = {
             'filetype':filetype,
             'exist':exist,
         }
         self.request.send(json.dumps(data_dic).encode('utf-8'))
-        if exist == 'y':
+        if exist:
             really_rm = self.request.recv(1024).decode()
             if really_rm == 'y' and filetype == 'f':
                 os.remove(filename)
-            elif really_rm == 'y' and filetype == 'y':
+            elif really_rm == 'y' and filetype == 'd':
                 shutil.rmtree(filename)
         else:
             pass
@@ -151,11 +152,11 @@ class ServerFtp(socketserver.BaseRequestHandler):
         dir_name = cmd_data['dir_name']
         if not os.path.isdir(dir_name):
             os.makedirs(dir_name)
-            exist = 'n'
-            self.request.send(exist.encode('utf-8'))
+            exist = False
+            self.request.send(json.dumps(exist).encode('utf-8'))
         else:
-            exist = 'y'
-            self.request.send(exist.encode('utf-8'))
+            exist = True
+            self.request.send(json.dumps(exist).encode('utf-8'))
             really_mk = self.request.recv(1024).decode()
             if really_mk == 'y':
                 shutil.rmtree(dir_name)
@@ -170,11 +171,11 @@ class ServerFtp(socketserver.BaseRequestHandler):
         new_name = cmd_dic['new_name']
         if os.path.isfile(old_name):
             os.rename(old_name,new_name)
-            exist = 'y'
+            exist = True
         else:
             if os.path.isdir(old_name):
                 os.rename(old_name, new_name)
-                exist = 'y'
+                exist = True
             else:
-                exist = 'n'
+                exist = False
         self.request.send(json.dumps(exist).encode('utf-8'))
