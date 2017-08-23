@@ -8,6 +8,8 @@ import shutil
 
 class ServerFtp(socketserver.BaseRequestHandler):
     """服务器端"""
+    UserHomePath = None
+
     def __userVerif__(self):
         """用户验证"""
         pass
@@ -144,6 +146,7 @@ class ServerFtp(socketserver.BaseRequestHandler):
             elif really_rm == 'y' and filetype == 'd':
                 shutil.rmtree(filename)
         else:
+
             pass
 
     def c_mkdir(self,*args):

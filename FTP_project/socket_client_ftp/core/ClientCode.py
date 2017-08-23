@@ -22,7 +22,14 @@ class ClientFtp(object):
 
     def __login__(self):
         """用户登录验证,验证次数超过3次自动退出程序"""
-        pass
+        username = input("Please enter username:")
+        userpassword = getpass.getpass("Please enter user password:")
+        username_sha1 = hashlib.sha1(username.encode()).hexdigest()
+        password_sha1 = hashlib.sha1(userpassword.encode()).hexdigest()
+        user_info = {
+            'username':username_sha1,
+            'password':password_sha1,
+        }
 
     def __interactive__(self):
         """用户交互"""
