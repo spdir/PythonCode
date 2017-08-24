@@ -57,7 +57,6 @@ class UserConf(object):
                 print("user [%s] exist" % username)
                 continue
             else:break
-        print('aaaa')
         while True:
             # userpassword = getpass.getpass("New Password:")
             # again_password = getpass.getpass("Retype new password:")
