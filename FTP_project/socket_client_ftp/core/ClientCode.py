@@ -24,11 +24,11 @@ class ClientFtp(object):
         """用户登录验证,验证次数超过3次自动退出程序"""
         username = input("Please enter username:")
         userpassword = getpass.getpass("Please enter user password:")
-        username_sha1 = hashlib.sha1(username.encode()).hexdigest()
-        password_sha1 = hashlib.sha1(userpassword.encode()).hexdigest()
+        username_md5 = hashlib.md5(username.encode()).hexdigest()
+        password_md5 = hashlib.md5(userpassword.encode()).hexdigest()
         user_info = {
-            'username':username_sha1,
-            'password':password_sha1,
+            'username':username_md5,
+            'password':password_md5,
         }
         self.client.send(json.dumps(user_info).encode('utf-8'))
         verify_json = self.client.recv(1024)
