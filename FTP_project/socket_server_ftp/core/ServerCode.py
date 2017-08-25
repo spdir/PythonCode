@@ -4,22 +4,45 @@ import socketserver
 import json
 import os
 import shutil
+import sys
+sys.path.append(os.path.join(os.path.dirname(os.getcwd()),'data'))
+import userconf
+
 
 
 class ServerFtp(socketserver.BaseRequestHandler):
     """服务器端"""
-    UserHomePath = None
 
     def __userVerif__(self):
         """用户验证"""
-        pass
+        usersdata_dic = userconf.usersdata()
+        recv_userinfo = self.request.recv(1024)
+        userinfo = json.loads(recv_userinfo.decode())
+        recv_username = userinfo['username']
+        if recv_username in usersdata_dic:
+            recv_user_password = userinfo['password']
+            user_info_list = usersdata_dic[recv_username]
+            user_password = user_info_list[0]
+            if recv_user_password == user_password:
+                VerificationResult = True
+                user_home_path = user_info_list[1]
+            else:
+                VerificationResult = False
+        else:
+            VerificationResult = False
+        self.request.send(json.dumps(VerificationResult).encode('utf-8'))
+        return user_home_path
+
 
     def __userhomedir__(self):
         """用户家目录定位"""
-        pass
+        user_home_path = self.__userVerif__()
+        if user_home_path:
+            os.chdir(user_home_path)
 
     def handle(self):
         """逻辑处理调用的接口"""
+        self.__userhomedir__()
         while True:
            try:
                client_address = self.client_address[0]

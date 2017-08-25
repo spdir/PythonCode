@@ -57,7 +57,6 @@ class UserConf(object):
                 print("user [%s] exist" % username)
                 continue
             else:break
-        print('aaaa')
         while True:
             # userpassword = getpass.getpass("New Password:")
             # again_password = getpass.getpass("Retype new password:")
@@ -74,9 +73,11 @@ class UserConf(object):
             if not os.path.isdir(user_home_path):
                 print('dictory not exist')
                 continue
+            else:
+                break
         user_info = "{}::{}::{}".format(username,password_md5,user_home_path)
         with open('user','a') as af:
-            af.write('\n'+ user_info)
+            af.write(user_info + '\n')
         print("user %s add successful"% username)
 
     def userdel(self,*args):

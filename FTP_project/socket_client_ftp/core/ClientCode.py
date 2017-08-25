@@ -30,11 +30,23 @@ class ClientFtp(object):
             'username':username_sha1,
             'password':password_sha1,
         }
+        self.client.send(json.dumps(user_info).encode('utf-8'))
+        verify_json = self.client.recv(1024)
+        verify = json.loads(verify_json.decode())
+        return verify
+
 
     def __interactive__(self):
         """用户交互"""
+        for i in range(4):
+            if i > 3:
+                exit('请求次数过多,连接已断开')
+            if self.__login__():
+                print("登陆成功")
+                break
+            else:
+                print("\033[31;1m请确保账号的和密码的正确性\033[0m")
         try:
-            print("登陆成功")
             while True:
                 cmd_inp = input(">>> ").strip()
                 if len(cmd_inp) == 0:continue
@@ -174,7 +186,7 @@ class ClientFtp(object):
 
     def cmd_cd(self,*args):
         """服务器:切换目录"""
-        pass
+
 
     def cmd_rm(self,*args):
         """服务器:删除用户家目录的文件"""
