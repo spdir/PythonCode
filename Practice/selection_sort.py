@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+#选择排序
 #python3.5.2
 def findSmallest(arr):
     smallest = arr[0]   #存储最小的值
