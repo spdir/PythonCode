@@ -1,7 +1,7 @@
 #python 2.7
  
 def quickSort(array):
-  if len(array) <= 2:
+  if len(array) < 2:
     return array
   else:
     provi = array[0]
