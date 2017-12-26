@@ -6,7 +6,7 @@ def binary_search(list, item):
 
     while low <= high: #只要范围没有缩小到只包含一个元素
         #如果(low + high)不是偶数，python自动向下取整，这里来检查中间元素
-        mid = (low + high)
+        mid = (low + high) / 2  #取中间数
         guess = list[mid]
         if guess == item: #找到了元素
             return mid
