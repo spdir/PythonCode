@@ -6,10 +6,10 @@ def quick_sort(array,reverse=False):
     if len(array) < 2:
       return array
     else:
-      provi = array[0]
-      less = [i for i in array[1:] if i <= provi]
-      greater = [i for i in array[1:] if i > provi]
-    return sort(less) + [provi] + sort(greater)
+      pivot = array[0]
+      less = [i for i in array[1:] if i <= pivot]
+      greater = [i for i in array[1:] if i > pivot]
+    return sort(less) + [pivot] + sort(greater)
   if reverse:
     return sort(array)[-1::-1]
   else:
