@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://D:/DomainTrade/.idea/DomainTrade.iml" filepath="D:/DomainTrade/.idea/DomainTrade.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/PyCode.iml" filepath="$PROJECT_DIR$/.idea/PyCode.iml" />
+      <module fileurl="file://D:/WORK/Script/.idea/Script.iml" filepath="D:/WORK/Script/.idea/Script.iml" />
       <module fileurl="file://D:/ShellScripts/.idea/ShellScripts.iml" filepath="D:/ShellScripts/.idea/ShellScripts.iml" />
     </modules>
   </component>
