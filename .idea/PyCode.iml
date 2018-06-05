@@ -7,6 +7,9 @@
     <orderEntry type="module" module-name="ShellScripts" />
     <orderEntry type="module" module-name="Script" />
     <orderEntry type="module" module-name="DomainTrade" />
+    <orderEntry type="module" module-name="alipay" />
+    <orderEntry type="module" module-name="hfb-merchant-web-demo-python" />
+    <orderEntry type="module" module-name="TestPyCode" />
   </component>
   <component name="TestRunnerService">
     <option name="PROJECT_TEST_RUNNER" value="Unittests" />

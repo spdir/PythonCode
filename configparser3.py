@@ -828,7 +828,7 @@ class RawConfigParser(MutableMapping):
         return self._get_conv(section, option, self._convert_to_boolean,
                               raw=raw, vars=vars, fallback=fallback, **kwargs)
 
-    def items(self, section=_UNSET, raw=False, vars=None):
+    def items(self, section: object = _UNSET, raw: object = False, vars: object = None) -> object:
         """Return a list of (name, value) tuples for each option in a section.
 
         All % interpolations are expanded in the return values, based on the

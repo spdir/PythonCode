@@ -6,6 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/PyCode.iml" filepath="$PROJECT_DIR$/.idea/PyCode.iml" />
       <module fileurl="file://D:/WORK/Script/.idea/Script.iml" filepath="D:/WORK/Script/.idea/Script.iml" />
       <module fileurl="file://D:/ShellScripts/.idea/ShellScripts.iml" filepath="D:/ShellScripts/.idea/ShellScripts.iml" />
+      <module fileurl="file://D:/TestPyCode/.idea/TestPyCode.iml" filepath="D:/TestPyCode/.idea/TestPyCode.iml" />
+      <module fileurl="file://D:/alipay/.idea/alipay.iml" filepath="D:/alipay/.idea/alipay.iml" />
+      <module fileurl="file://D:/hfb-merchant-web-demo-python/.idea/hfb-merchant-web-demo-python.iml" filepath="D:/hfb-merchant-web-demo-python/.idea/hfb-merchant-web-demo-python.iml" />
     </modules>
   </component>
 </project>

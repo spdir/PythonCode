@@ -335,7 +335,7 @@ class RawConfigParser:
     else:
       raise NoOptionError(option, section)
 
-  def items(self, section):
+  def items(self, section: object) -> object:
     try:
       d2 = self._sections[section]
     except KeyError:
@@ -657,7 +657,7 @@ class ConfigParser(RawConfigParser):
     else:
       return self._interpolate(section, option, value, d)
 
-  def items(self, section, raw=False, vars=None):
+  def items(self, section: object, raw: object = False, vars: object = None) -> object:
     """Return a list of tuples with (name, value) for each option
     in the section.
 
